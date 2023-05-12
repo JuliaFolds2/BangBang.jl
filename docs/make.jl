@@ -8,7 +8,7 @@ makedocs(
         "Home" => "index.md",
         hide("internals.md"),
     ],
-    repo = "https://github.com/JuliaFolds/BangBang.jl/blob/{commit}{path}#L{line}",
+    repo = "https://github.com/JuliaFolds2/BangBang.jl/blob/{commit}{path}#L{line}",
     sitename = "BangBang.jl",
     authors = "Takafumi Arakaki <aka.tkf@gmail.com>",
     doctest = false,  # run via tests
@@ -32,4 +32,4 @@ makedocs(
     # https://juliadocs.github.io/Documenter.jl/stable/lib/public/#Documenter.makedocs
 )
 
-deploydocs(; repo = "github.com/JuliaFolds/BangBang.jl", push_preview = true)
+deploydocs(; repo = "github.com/JuliaFolds2/BangBang.jl", push_preview = true)
