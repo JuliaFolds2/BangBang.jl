@@ -63,6 +63,7 @@ include("NoBang/NoBang.jl")
 using .NoBang: Empty, SingletonVector, singletonof
 
 @static if !isdefined(Base, :get_extension)
+    using Tables
     include("../ext/BangBangTablesExt.jl")
 end
 
