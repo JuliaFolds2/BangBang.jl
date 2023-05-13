@@ -4,9 +4,9 @@ module BangBangTablesExt
     using BangBang.NoBang: SingletonVector
     using Tables: Tables
 else
-    using ../BangBang: BangBang
-    using ../BangBang.NoBang: SingletonVector
-    using ../Tables: Tables
+    using ..BangBang: BangBang
+    using ..BangBang.NoBang: SingletonVector
+    using ..Tables: Tables
 end
 
     # Define table interface as a `SingletonVector{<:NamedTuple}`:
