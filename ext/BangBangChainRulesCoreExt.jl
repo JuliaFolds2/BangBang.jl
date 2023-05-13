@@ -4,8 +4,8 @@ module BangBangChainRulesCoreExt
     using BangBang: possible
     using ChainRulesCore
 else
-    using ../BangBang: possible
-    using ../ChainRulesCore
+    using ..BangBang: possible
+    using ..ChainRulesCore
 end
 
     # Treat everything immutable during differentiation:
