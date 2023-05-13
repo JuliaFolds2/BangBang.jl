@@ -1,9 +1,16 @@
 
 module BangBangStaticArraysExt
+@static if isdefined(Base, :get_extension)
     using BangBang: BangBang
     using BangBang.NoBang: NoBang
     using BangBang: setindex!
     using StaticArrays: StaticArrays
+else
+    using ../BangBang: BangBang
+    using ../BangBang.NoBang: NoBang
+    using ../BangBang: setindex!
+    using ../StaticArrays: StaticArrays
+end
 
 
     NoBang.push(xs::StaticArrays.StaticVector, x) = vcat(xs, StaticArrays.SVector(x))
