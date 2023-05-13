@@ -6,10 +6,10 @@ module BangBangStaticArraysExt
     using BangBang: setindex!
     using StaticArrays: StaticArrays
 else
-    using ../BangBang: BangBang
-    using ../BangBang.NoBang: NoBang
-    using ../BangBang: setindex!
-    using ../StaticArrays: StaticArrays
+    using ..BangBang: BangBang
+    using ..BangBang.NoBang: NoBang
+    using ..BangBang: setindex!
+    using ..StaticArrays: StaticArrays
 end
 
 
