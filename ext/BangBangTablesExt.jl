@@ -1,7 +1,13 @@
 module BangBangTablesExt
+@static if isdefined(Base, :get_extension)
     using BangBang: BangBang
     using BangBang.NoBang: SingletonVector
     using Tables: Tables
+else
+    using ../BangBang: BangBang
+    using ../BangBang.NoBang: SingletonVector
+    using ../Tables: Tables
+end
 
     # Define table interface as a `SingletonVector{<:NamedTuple}`:
     Tables.istable(::Type{<:SingletonVector{<:NamedTuple{names}}}) where {names} =
