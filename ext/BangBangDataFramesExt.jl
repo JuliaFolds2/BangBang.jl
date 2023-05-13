@@ -1,5 +1,5 @@
 module BangBangDataFramesExt
-    using BangBang: Mutator
+    using BangBang
     using Base: setindex!
     using DataFrames
     using DataFrames.Tables: Tables

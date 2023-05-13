@@ -1,9 +1,9 @@
 
 module BangBangStaticArraysExt
-    using BangBang
-    using BangBang.NoBang
+    using BangBang: BangBang
+    using BangBang.NoBang: NoBang
     using BangBang: setindex!
-    using StaticArrays
+    using StaticArrays: StaticArrays
 
 
     NoBang.push(xs::StaticArrays.StaticVector, x) = vcat(xs, StaticArrays.SVector(x))

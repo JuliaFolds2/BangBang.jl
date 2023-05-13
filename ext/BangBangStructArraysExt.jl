@@ -1,6 +1,6 @@
 module BangBangStructArraysExt
-    using BangBang
-    using StructArrays
+    using BangBang: BangBang
+    using StructArrays: StructArrays
     if isdefined(StructArrays, :append!!)
         BangBang.append!!(xs::StructArrays.StructVector, ys) =
             StructArrays.append!!(xs, ys)
@@ -9,5 +9,5 @@ module BangBangStructArraysExt
             StructArrays.grow_to_structarray!(xs, ys)
     end
 
-    BangBang.push!!(xs::StructArrays.StructVector, ys...) = append!!(xs, ys)
+    BangBang.push!!(xs::StructArrays.StructVector, ys...) = BangBang.append!!(xs, ys)
 end

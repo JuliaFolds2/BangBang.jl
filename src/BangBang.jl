@@ -62,6 +62,10 @@ function unique!! end
 include("NoBang/NoBang.jl")
 using .NoBang: Empty, SingletonVector, singletonof
 
+@static if !isdefined(Base, :get_extension)
+    include("../ext/BangBangTablesExt.jl")
+end
+
 include("core.jl")
 include("base.jl")
 include("linearalgebra.jl")

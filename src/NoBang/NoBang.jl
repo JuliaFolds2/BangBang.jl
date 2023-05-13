@@ -6,7 +6,6 @@ using Base.Iterators: Pairs
 using Base: ImmutableDict
 using Requires
 using ConstructionBase: constructorof, setproperties
-using Tables: Tables
 
 using ..BangBang: push!!, unique!!, implements
 
