@@ -1,36 +1,29 @@
 name: Documentation
-
 on:
-  push:
-    branches:
-      - master
-      - actions/trigger/docs
-    tags: '*'
-  pull_request:
-
+  - push
+  - pull_request
 jobs:
-  Documenter:
+  docs:
+    name: Documentation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: julia-actions/setup-julia@latest
+      - uses: actions/checkout@v3
+      - uses: julia-actions/setup-julia@v1
         with:
-          version: 1.6
-      - name: Install Run.jl
-        run: julia -e 'using Pkg; pkg"add Run@0.1"'
-      - name: Install dependencies
-        run: julia -e 'using Run; Run.prepare_docs()'
-      - name: Build and deploy
-        id: build-and-deploy
-        if: |
-          github.event_name == 'push' || (
-            github.event_name == 'pull_request' &&
-            !contains(github.head_ref, 'create-pull-request/')
-          )
+          version: '1'
+      - run: |
+          julia --project=docs -e '
+            import Pkg; Pkg.add("Documenter")
+            using Pkg
+            Pkg.develop(PackageSpec(path=pwd()))
+            Pkg.instantiate()'
+      - run: |
+          julia --project=docs -e '
+            import Pkg; Pkg.add("Documenter")
+            using Documenter: doctest
+            using BangBang 
+            doctest(BangBang)'
+      - run: julia --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCUMENTER_KEY: ${{ secrets.SSH_KEY }}
-        run: julia -e 'using Run; Run.docs()'
-      - name: Just build
-        if: steps.build-and-deploy.outcome == 'skipped'
-        run: julia -e 'using Run; Run.docs()'
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
