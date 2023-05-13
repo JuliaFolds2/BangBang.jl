@@ -3,8 +3,8 @@ module BangBangStructArraysExt
     using BangBang: BangBang
     using StructArrays: StructArrays
 else
-    using ../BangBang: BangBang
-    using ../StructArrays: StructArrays
+    using ..BangBang: BangBang
+    using ..StructArrays: StructArrays
 end
     if isdefined(StructArrays, :append!!)
         BangBang.append!!(xs::StructArrays.StructVector, ys) =
