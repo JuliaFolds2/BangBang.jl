@@ -46,7 +46,7 @@ prefermutation(lens) = Lens!!(lens)
 """
     @set!! assignment
 
-Like `Setfield.@set`, but prefer mutation if possible.
+Like `Accessors.@set`, but prefer mutation if possible.
 
 # Examples
 ```jldoctest
