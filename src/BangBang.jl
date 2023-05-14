@@ -98,6 +98,9 @@ function __init__()
         @require DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0" begin
             include("../ext/BangBangDataFramesExt.jl")
         end
+        @require ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4" begin
+            include("../ext/BangBangChainRulesCoreExt.jl")
+        end
     end
 end
 
