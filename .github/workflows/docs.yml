@@ -3,34 +3,24 @@ name: Documentation
 on:
   push:
     branches:
-      - master
-      - actions/trigger/docs
+      - master # update to match your development branch (master, main, dev, trunk, ...)
     tags: '*'
   pull_request:
 
 jobs:
-  Documenter:
+  build:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: julia-actions/setup-julia@latest
+      - uses: julia-actions/setup-julia@v1
         with:
-          version: 1.6
-      - name: Install Run.jl
-        run: julia -e 'using Pkg; pkg"add Run@0.1"'
+          version: '1.6'
       - name: Install dependencies
-        run: julia -e 'using Run; Run.prepare_docs()'
+        run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
       - name: Build and deploy
-        id: build-and-deploy
-        if: |
-          github.event_name == 'push' || (
-            github.event_name == 'pull_request' &&
-            !contains(github.head_ref, 'create-pull-request/')
-          )
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCUMENTER_KEY: ${{ secrets.SSH_KEY }}
-        run: julia -e 'using Run; Run.docs()'
-      - name: Just build
-        if: steps.build-and-deploy.outcome == 'skipped'
-        run: julia -e 'using Run; Run.docs()'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # If authenticating with GitHub Actions token
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }} # If authenticating with SSH deploy key
+        run: julia --project=docs/ docs/make.jl
