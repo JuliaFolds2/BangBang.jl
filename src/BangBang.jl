@@ -68,8 +68,8 @@ using .NoBang: Empty, SingletonVector, singletonof
 # using Tables
 # include("../ext/BangBangTablesExt.jl")
 # end
-using Tables
-include("BangBangTablesExt.jl")
+# using Tables
+# include("BangBangTablesExt.jl")
 
 
 include("core.jl")
@@ -91,6 +91,9 @@ function __init__()
         end
         @require StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a" begin
             include("../ext/BangBangStructArraysExt.jl")
+        end
+        @require Tables = "bd369af6-aec1-5ad0-b16a-f7cc5008161c" begin
+            include("../ext/BangBangTablesExt.jl")
         end
         @require TypedTables = "9d95f2ec-7b3d-5a63-8d20-e2491e220bb9" begin
             include("../ext/BangBangTypedTablesExt.jl")
