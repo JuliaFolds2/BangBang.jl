@@ -79,8 +79,8 @@ include("setfield.jl")
 
 using .SetfieldImpl: @set!!, prefermutation
 
-@static if !isdefined(Base, :get_extension)
-    function __init__()
+function __init__()
+    @static if !isdefined(Base, :get_extension)
         @require StaticArrays = "90137ffa-7385-5640-81b9-e52037218182" begin
             include("../ext/BangBangStaticArraysExt.jl")
         end
