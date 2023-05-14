@@ -16,7 +16,7 @@ end
     NoBang.push(xs::StaticArrays.StaticVector, x) = vcat(xs, StaticArrays.SVector(x))
     NoBang.pushfirst(xs::StaticArrays.StaticVector, x) = StaticArrays.pushfirst(xs, x)
     NoBang.pushfirst(xs::StaticArrays.StaticVector, y, ys...) =
-    foldl(pushfirst, (reverse(ys)..., y), init=xs)
+    foldl(NoBang.pushfirst, (reverse(ys)..., y), init=xs)
     NoBang.pop(xs::StaticArrays.StaticVector) = (StaticArrays.pop(xs), xs[end])
     NoBang.popfirst(xs::StaticArrays.StaticVector) = (StaticArrays.popfirst(xs), xs[1])
     NoBang.deleteat(xs::StaticArrays.StaticVector, i) = StaticArrays.deleteat(xs, i)
