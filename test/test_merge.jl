@@ -2,7 +2,7 @@ module TestMerge
 
 include("preamble.jl")
 using BangBang.NoBang: SingletonDict
-using InitialValues: Init, asmonoid
+using InitialValues: InitialValue, asmonoid
 
 function signature(args)
     #! format: off
@@ -65,11 +65,11 @@ end
 @testset "Init" begin
     for m!! in [merge!!, mergewith!!(+)]
         d = Dict(:a => 1)
-        @test m!!(d, Init(m!!)) === d
-        @test m!!(Init(m!!), d) !== d
-        @test m!!(Init(m!!), d) ==ₜ d
-        @test m!!(Init(m!!), (x for x in d if true)) ==ₜ d
-        @test m!!(Init(m!!), Init(m!!)) === Init(m!!)
+        @test m!!(d, InitialValue(m!!)) === d
+        @test m!!(InitialValue(m!!), d) !== d
+        @test m!!(InitialValue(m!!), d) ==ₜ d
+        @test m!!(InitialValue(m!!), (x for x in d if true)) ==ₜ d
+        @test m!!(InitialValue(m!!), InitialValue(m!!)) === InitialValue(m!!)
         @test asmonoid(m!!) === m!!
     end
 end
