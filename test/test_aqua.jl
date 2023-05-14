@@ -5,13 +5,13 @@ using BangBang
 using Setfield
 using Test
 
-stale_deps = Base.VERSION < v"1.9"
+stale_deps = Base.VERSION >= v"1.9"
 project_toml_formatting = stale_deps
 Aqua.test_all(
     BangBang;
     ambiguities=(exclude=[Base.get, Setfield.set, Setfield.modify],),
-    stale_deps = stale_deps, #remove when Aqua.jl fixes https://github.com/JuliaTesting/Aqua.jl/issues/107
-    project_toml_formatting = project_toml_formatting, #remove when Aqua.jl fixes https://github.com/JuliaTesting/Aqua.jl/issues/105
+    stale_deps = false, #remove when Aqua.jl fixes https://github.com/JuliaTesting/Aqua.jl/issues/107
+    project_toml_formatting = false  #remove when Aqua.jl fixes https://github.com/JuliaTesting/Aqua.jl/issues/105
 )
 
 # @testset "Compare test/Project.toml and test/environments/main/Project.toml" begin
