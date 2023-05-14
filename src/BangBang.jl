@@ -62,15 +62,6 @@ function unique!! end
 include("NoBang/NoBang.jl")
 using .NoBang: Empty, SingletonVector, singletonof
 
-# Next breaking version we should make this a proper extension
-# ----------------------
-# @static if !isdefined(Base, :get_extension)
-# using Tables
-# include("../ext/BangBangTablesExt.jl")
-# end
-# using Tables
-# include("BangBangTablesExt.jl")
-
 
 include("core.jl")
 include("base.jl")
