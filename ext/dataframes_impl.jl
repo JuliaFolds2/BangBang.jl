@@ -29,7 +29,7 @@ function df_append_columns!!(df, table)
     colnames = DataFrames._names(df)  # avoid copy
     checkcolumnnames(columns, colnames)
     for (pos, (name, col)) in enumerate(zip(colnames, columns))
-        columns[pos] = append!!(col, _getvalue(table, pos, name))
+        columns[pos] = BangBang.append!!(col, _getvalue(table, pos, name))
     end
     return df
 end
@@ -59,7 +59,7 @@ function df_append_rows!!(df, table)
         for (pos, (name, col)) in enumerate(zip(colnames, columns))
             v = _getvalue(x, pos, name)
             @manually_specialize(
-                columns[pos] = push!!(col, v),
+                columns[pos] = BangBang.push!!(col, v),
                 # "Inline" some method lookups for typical column types:
                 col isa Vector{Int},
                 col isa Vector{Union{Int,Missing}},

@@ -19,22 +19,6 @@ struct _NoValue end
 @inline Base.foldl(op, v::SingletonVector; init = _NoValue()) =
     init isa _NoValue ? v.value : op(init, v.value)
 
-# Define table interface as a `SingletonVector{<:NamedTuple}`:
-Tables.istable(::Type{<:SingletonVector{<:NamedTuple{names}}}) where {names} =
-    @isdefined(names)
-Tables.rowaccess(::Type{<:SingletonVector{<:NamedTuple{names}}}) where {names} =
-    @isdefined(names)
-Tables.columnaccess(::Type{<:SingletonVector{<:NamedTuple{names}}}) where {names} =
-    @isdefined(names)
-
-# For backward compatibility (these were automatically `false` in Tables 0.2):
-Tables.istable(::Type{SingletonVector{NamedTuple}}) = false
-Tables.istable(::Type{SingletonVector{<:NamedTuple}}) = false
-
-Tables.rows(x::SingletonVector{<:NamedTuple}) = [x.value]
-Tables.columns(x::SingletonVector{<:NamedTuple{names}}) where {names} =
-    NamedTuple{names}(map(x -> [x], Tuple(x.value)))
-
 
 struct SingletonDict{K,V} <: AbstractDict{K,V}
     key::K

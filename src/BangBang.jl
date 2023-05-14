@@ -47,9 +47,10 @@ using Compat: hasproperty
 using ConstructionBase: constructorof
 using InitialValues
 using LinearAlgebra
-using Requires
-using Tables: Tables
-using ChainRulesCore: ChainRulesCore
+
+@static if !isdefined(Base, :get_extension)
+    using Requires
+end
 
 include("utils.jl")
 
@@ -61,6 +62,16 @@ function unique!! end
 include("NoBang/NoBang.jl")
 using .NoBang: Empty, SingletonVector, singletonof
 
+# Next breaking version we should make this a proper extension
+# ----------------------
+# @static if !isdefined(Base, :get_extension)
+# using Tables
+# include("../ext/BangBangTablesExt.jl")
+# end
+using Tables
+include("BangBangTablesExt.jl")
+
+
 include("core.jl")
 include("base.jl")
 include("linearalgebra.jl")
@@ -69,24 +80,27 @@ include("broadcast.jl")
 include("collectors.jl")
 include("initials.jl")
 include("macro.jl")
-include("dataframes_impl.jl")
-include("chainrules.jl")
-
 include("setfield.jl")
+
 using .SetfieldImpl: @set!!, prefermutation
 
 function __init__()
-    @require StaticArrays = "90137ffa-7385-5640-81b9-e52037218182" begin
-        include("staticarrays.jl")
-    end
-    @require StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a" begin
-        include("structarrays.jl")
-    end
-    @require TypedTables = "9d95f2ec-7b3d-5a63-8d20-e2491e220bb9" begin
-        include("typedtables.jl")
-    end
-    @require DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0" begin
-        include("dataframes.jl")
+    @static if !isdefined(Base, :get_extension)
+        @require StaticArrays = "90137ffa-7385-5640-81b9-e52037218182" begin
+            include("../ext/BangBangStaticArraysExt.jl")
+        end
+        @require StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a" begin
+            include("../ext/BangBangStructArraysExt.jl")
+        end
+        @require TypedTables = "9d95f2ec-7b3d-5a63-8d20-e2491e220bb9" begin
+            include("../ext/BangBangTypedTablesExt.jl")
+        end
+        @require DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0" begin
+            include("../ext/BangBangDataFramesExt.jl")
+        end
+        @require ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4" begin
+            include("../ext/BangBangChainRulesCoreExt.jl")
+        end
     end
 end
 
