@@ -5,6 +5,6 @@ Pages = ["index.md"]
 ```
 
 ```@autodocs
-Modules = [BangBang, BangBang.NoBang, BangBang.SetfieldImpl, BangBang.Extras]
+Modules = [BangBang, BangBang.NoBang, BangBang.AccessorsImpl, BangBang.Extras]
 Private = false
 ```
