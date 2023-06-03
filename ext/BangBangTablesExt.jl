@@ -2,15 +2,15 @@ module BangBangTablesExt
 
 # Uncomment the following code when we move Tables to an extension
 #---------------------------
-# @static if isdefined(Base, :get_extension)
-#     using BangBang: BangBang
-#     using BangBang.NoBang: SingletonVector
-#     using Tables: Tables
-# else
+@static if isdefined(Base, :get_extension)
+    using BangBang: BangBang
+    using BangBang.NoBang: SingletonVector
+    using Tables: Tables
+else
     using ..BangBang: BangBang
     using ..BangBang.NoBang: SingletonVector
     using ..Tables: Tables
-# end
+end
 
 # Define table interface as a `SingletonVector{<:NamedTuple}`:
 Tables.istable(::Type{<:SingletonVector{<:NamedTuple{names}}}) where {names} =
