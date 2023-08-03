@@ -7,7 +7,7 @@ using Base: ImmutableDict
 using Requires
 using ConstructionBase: constructorof, setproperties
 
-using ..BangBang: push!!, unique!!, implements
+using ..BangBang: push!!, unique!!, union!!, symdiff!!, implements
 
 include("singletoncontainers.jl")
 include("base.jl")
