@@ -82,7 +82,7 @@ _intersect(x::Empty, ys...) = x
 
 _setdiff(x::Empty, ys...) = x
 
-_symdiff(::Empty{T}, x, ys) where {T} = symdiff!!(unique!!(T(x)), ys...)
+_symdiff(::Empty{T}, x, ys...) where {T} = symdiff!!(unique!!(T(x)), ys...)
 _symdiff(e::Empty, ::Empty...) = e
 
 _setindex(::Empty{T}, v, k) where {T <: AbstractDict} = T(SingletonDict(k, v))
