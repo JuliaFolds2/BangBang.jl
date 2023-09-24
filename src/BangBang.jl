@@ -14,6 +14,7 @@ export @!,
        deleteat!!,
        empty!!,
        finish!,
+       intersect!!,
        lmul!!,
        materialize!!,
        merge!!,
@@ -31,6 +32,7 @@ export @!,
        setproperty!!,
        singletonof,
        splice!!,
+       symdiff!!,
        union!!,
        unique!!
 
@@ -58,6 +60,8 @@ include("utils.jl")
 function implements end
 function push!! end
 function unique!! end
+function union!! end
+function symdiff!! end
 
 include("NoBang/NoBang.jl")
 using .NoBang: Empty, SingletonVector, singletonof
