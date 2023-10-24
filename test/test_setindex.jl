@@ -18,7 +18,6 @@ end
 
 replace_colon_with_range_linear(inds::NTuple{1}, x::AbstractArray) = inds[1] isa Colon ? (1:length(x),) : inds
 
-# TODO: Do we handle expansive indexing, e.g. `x[:, :]` for `x isa Vector` correctly?
 is_linear_index(inds::Tuple, x::AbstractArray) = length(inds) == 1
 
 @testset begin
