@@ -488,6 +488,21 @@ possible(::typeof(_setindex!), ::C, ::V, ::K) where {C <: AbstractDict, V, K} =
     promote_type(keytype(C), K) <: keytype(C) &&
     promote_type(valtype(C), V) <: valtype(C)
 
+# Need to support a wide range of indexing behaviors.
+# - Tuples of indices
+# - Colon
+# - AbstractUnitRange
+# - Indexing with arrays
+function possible(
+    ::typeof(_setindex!),
+    ::C,
+    ::T,
+    ::Vararg
+) where {C <: AbstractArray{<:Real}, T <: AbstractArray{<:Real}}
+    return implements(setindex!, C) &&
+        promote_type(eltype(C), eltype(T)) <: eltype(C)
+end
+
 """
     resize!!(vector::AbstractVector, n::Integer) -> vector′
 """
