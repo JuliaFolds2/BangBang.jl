@@ -3,6 +3,10 @@ module TestSetIndex
 include("preamble.jl")
 
 # Some utility methods for testing `setindex!`.
+test_linear_index_only(::Tuple, ::AbstractArray) = false
+test_linear_index_only(inds::NTuple{1}, ::AbstractArray) = true
+test_linear_index_only(inds::NTuple{1}, ::AbstractVector) = false
+
 replace_colon_with_axis(inds::Tuple, x) = ntuple(length(inds)) do i
     inds[i] isa Colon ? axes(x, i) : inds[i]
 end
@@ -17,8 +21,6 @@ replace_colon_with_booleans(inds::Tuple, x) = ntuple(length(inds)) do i
 end
 
 replace_colon_with_range_linear(inds::NTuple{1}, x::AbstractArray) = inds[1] isa Colon ? (1:length(x),) : inds
-
-is_linear_index(inds::Tuple, x::AbstractArray) = length(inds) == 1
 
 @testset begin
     @test setindex!!((1, 2, 3), :two, 2) === (1, :two, 3)
@@ -58,7 +60,7 @@ end
 
         # If we have `Colon` in the index, we replace this with other equivalent indices.
         if any(Base.Fix2(isa, Colon), src_idx)
-            if is_linear_index(src_idx, x)
+            if test_linear_index_only(src_idx, x)
                 # With range instead of `Colon`.
                 @test @inferred(setindex!!(x, x[src_idx...], replace_colon_with_range_linear(src_idx, x)...)) === x
             else
