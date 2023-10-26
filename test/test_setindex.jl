@@ -30,6 +30,7 @@ replace_colon_with_range_linear(inds::NTuple{1}, x::AbstractArray) = inds[1] isa
         Dict(:a=>10, :b=>2)
     @test setindex!!(Dict{Symbol,Int}(:a=>1, :b=>2), 3, "c") ==
         Dict(:a=>1, :b=>2, "c"=>3)
+    @testset setindex!!([1, 2, 3], [4, 5], 1) === [[4, 5], 2, 3]
 end
 
 @testset "mutation" begin
