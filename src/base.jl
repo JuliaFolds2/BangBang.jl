@@ -521,7 +521,7 @@ function possible(
         #
         #     setindex!!([1, 2, 3], [4, 5, 6], :, 1)
         #
-        # which are in fact valid. However, this case is rare.
+        # which are in fact valid. However, this cases are rare.
         (_index_dimension(indices) == M || _index_dimension(indices) == 1)
 end
 
