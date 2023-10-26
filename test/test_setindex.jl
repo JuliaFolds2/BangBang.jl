@@ -30,15 +30,21 @@ replace_colon_with_range_linear(inds::NTuple{1}, x::AbstractArray) = inds[1] isa
         Dict(:a=>10, :b=>2)
     @test setindex!!(Dict{Symbol,Int}(:a=>1, :b=>2), 3, "c") ==
         Dict(:a=>1, :b=>2, "c"=>3)
-    @testset setindex!!([1, 2, 3], [4, 5], 1) === [[4, 5], 2, 3]
 end
 
 @testset "mutation" begin
-    @testset for args in [
-        ([1, 2, 3], 20, 2),
-        (Dict(:a=>1, :b=>2), 10, :a),
-    ]
-        @test setindex!!(args...) === args[1]
+    @testset "without type expansion" begin
+        for args in [
+            ([1, 2, 3], 20, 2),
+            (Dict(:a => 1, :b => 2), 10, :a),
+        ]
+            @test setindex!!(args...) === args[1]
+        end
+    end
+
+    @testset "with type expansion" begin
+        @test setindex!!([1, 2, 3], [4, 5], 1) == [[4, 5], 2, 3]
+        @test setindex!!([1, 2, 3], [4, 5, 6], :, 1) == [4, 5, 6]
     end
 end
 
