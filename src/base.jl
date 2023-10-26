@@ -481,23 +481,27 @@ Base.@propagate_inbounds _setindex!(xs, v, I...) = (setindex!(xs, v, I...); xs)
 
 pure(::typeof(_setindex!)) = NoBang._setindex
 possible(::typeof(_setindex!), ::Union{Tuple,NamedTuple,Empty}, ::Vararg) = false
-possible(::typeof(_setindex!), ::C, ::T, ::Vararg) where {C <: AbstractArray, T} =
-    implements(setindex!, C) && promote_type(eltype(C), T) <: eltype(C)
 possible(::typeof(_setindex!), ::C, ::V, ::K) where {C <: AbstractDict, V, K} =
     implements(setindex!, C) &&
     promote_type(keytype(C), K) <: keytype(C) &&
     promote_type(valtype(C), V) <: valtype(C)
 
-# Need to support a wide range of indexing behaviors.
-# - Tuples of indices
-# - Colon
-# - AbstractUnitRange
-# - Indexing with arrays
+# Default implementation for `_setindex!` with `AbstractArray`.
+# But this will return `false` even in cases such as
 #
-# Also need to ensure that the dimensionality of the index is
+#     setindex!!([1, 2, 3], [4, 5, 6], :)
+#
+# because `promote_type(eltype(C), T) <: eltype(C)` is `false`.
+possible(::typeof(_setindex!), ::C, ::T, ::Vararg) where {C <: AbstractArray, T} =
+    implements(setindex!, C) && promote_type(eltype(C), T) <: eltype(C)
+
+# To address this, we specialize on the case where `T<:AbstractArray`.
+# In addition, we need to support a wide range of indexing behaviors:
+#
+# We also need to ensure that the dimensionality of the index is
 # valid, i.e. that we're not returning `true` in cases such as
 #
-#     setindex!!([1, 2, 3], 1, [4, 5])
+#     setindex!!([1, 2, 3], [4, 5], 1)
 #
 # which should return `false`.
 _index_dimension(::Any) = 0
@@ -513,6 +517,11 @@ function possible(
     ) where {M, C <: AbstractArray{<:Real}, T <: AbstractArray{<:Real,M}}
     return implements(setindex!, C) &&
         promote_type(eltype(C), eltype(T)) <: eltype(C) &&
+        # This will still return `false` for scenarios such as
+        #
+        #     setindex!!([1, 2, 3], [4, 5, 6], :, 1)
+        #
+        # which are in fact valid. However, this case is rare.
         (_index_dimension(indices) == M || _index_dimension(indices) == 1)
 end
 
