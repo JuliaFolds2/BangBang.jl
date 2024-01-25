@@ -710,15 +710,50 @@ false
 ```
 """
 union!!
-union!!(set, itr) = may(union!, set, itr)
-union!!(set, itr, itrs...) = foldl(union!!, itrs, init = union!!(set, itr))
+union!!(args...) = may(union!, args...)
 
 pure(::typeof(union!)) = NoBang._union
 _asbb(::typeof(union!)) = union!!
-possible(::typeof(union!), ::C, ::I) where {C<:Union{AbstractSet,AbstractVector},I} =
+possible(::typeof(union!), ::C, ts...) where C<:Union{AbstractSet,AbstractVector} =
     implements(push!, C) &&
-    IteratorEltype(I) isa HasEltype && promote_type(eltype(C), eltype(I)) <: eltype(C)
-possible(::typeof(union!), ::Empty, ::Any) = false
+    all(t -> IteratorEltype(t) isa HasEltype, ts) &&
+    promote_type(eltype(C), map(eltype, ts)...) <: eltype(C)
+possible(::typeof(union!), ::Empty, ts...) = false
+# TODO: simplify `possible` after deciding what to do with dictionaries
+
+"""
+    intersect!!(setlike, others...) -> setlike′
+
+Return the set of elements in `setlike` and in all the collections
+`others`. Mutate `setlike` if possible.
+
+This function "owns" `setlike` but not `others`; i.e., returned value
+`setlike′` does not alias any of `others`.  For example,
+`other = Set([1]); intersect!!(Set([1, 2]), other)` does not return `other` as-is.
+
+# Examples
+```jldoctest
+julia> using BangBang
+
+julia> xs = Set([1, 2]);
+
+julia> ys = intersect!!(xs, [1]);  # mutates `xs` as it's possible
+
+julia> ys == Set([1])
+true
+
+julia> ys === xs  # `xs` is returned
+true
+```
+"""
+intersect!!
+intersect!!(args...) = may(intersect!, args...)
+
+pure(::typeof(intersect!)) = NoBang._intersect
+_asbb(::typeof(intersect!)) = intersect!!
+possible(::typeof(intersect!), ::C, ::Any...) where {C<:Union{AbstractSet,AbstractVector}} =
+    implements(push!, C)
+possible(::typeof(intersect!), ::Empty, ts...) = false
 # TODO: simplify `possible` after deciding what to do with dictionaries
 
 """
@@ -729,8 +764,7 @@ Return the set of elements in `setlike` but not in any of the collections
 
 This function "owns" `setlike` but not `others`; i.e., returned value
 `setlike′` does not alias any of `others`.  For example,
-`setdiff!!(Empty(Set), other)` shallow-copies `other` instead of
-returning `other` as-is.
+`other = Set([]); setdiff!!(Empty(Set), other)` does not return `other` as-is.
 
 # Examples
 ```jldoctest
@@ -748,12 +782,49 @@ true
 ```
 """
 setdiff!!
-setdiff!!(set, itr) = may(setdiff!, set, itr)
-setdiff!!(set, itr, itrs...) = foldl(setdiff!!, itrs, init = setdiff!!(set, itr))
+setdiff!!(args...) = may(setdiff!, args...)
 
 pure(::typeof(setdiff!)) = NoBang._setdiff
 _asbb(::typeof(setdiff!)) = setdiff!!
-possible(::typeof(setdiff!), ::C, ::Any) where {C<:Union{AbstractSet,AbstractVector}} =
+possible(::typeof(setdiff!), ::C, ::Any...) where {C<:Union{AbstractSet,AbstractVector}} =
     implements(push!, C)
-possible(::typeof(setdiff!), ::Empty, ::Any) = false
+possible(::typeof(setdiff!), ::Empty, ts...) = false
+# TODO: simplify `possible` after deciding what to do with dictionaries
+
+"""
+    symdiff!!(setlike, others...) -> setlike′
+
+Return the set of elements that occur an odd number of times in
+`setlike` and the `others` collections. Mutate `setlike` if possible.
+
+This function "owns" `setlike` but not `others`; i.e., returned value
+`setlike′` does not alias any of `others`.  For example,
+`symdiff!!(Empty(Set), other)` shallow-copies `other` instead of
+returning `other` as-is.
+
+# Examples
+```jldoctest
+julia> using BangBang
+
+julia> xs = Set([1, 2]);
+
+julia> ys = symdiff!!(xs, [2, 3]);  # mutates `xs` as it's possible
+
+julia> ys == Set([1, 3])
+true
+
+julia> ys === xs  # `xs` is returned
+true
+```
+"""
+symdiff!!
+symdiff!!(args...) = may(symdiff!, args...)
+
+pure(::typeof(symdiff!)) = NoBang._symdiff
+_asbb(::typeof(symdiff!)) = symdiff!!
+possible(::typeof(symdiff!), ::C, ts...) where C<:Union{AbstractSet,AbstractVector} =
+    implements(push!, C) &&
+    all(t -> IteratorEltype(t) isa HasEltype, ts) &&
+    promote_type(eltype(C), map(eltype, ts)...) <: eltype(C)
+possible(::typeof(symdiff!), ::Empty, ts...) = false
 # TODO: simplify `possible` after deciding what to do with dictionaries

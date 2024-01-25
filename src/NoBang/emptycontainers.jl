@@ -75,10 +75,15 @@ append(e::Empty, ::Empty) = e
 _empty(x::Empty) = x
 resize(::Empty{T}, n::Integer) where {T <: AbstractVector} = similar(T, (n,))
 
-_union(::Empty{T}, x) where {T} = unique!!(T(x))
-_union(e::Empty, ::Empty) = e
+_union(::Empty{T}, x, ys...) where {T} = union!!(unique!!(T(x)), ys...)
+_union(e::Empty, ::Empty...) = e
 
-_setdiff(x::Empty, _) = x
+_intersect(x::Empty, ys...) = x
+
+_setdiff(x::Empty, ys...) = x
+
+_symdiff(::Empty{T}, x, ys...) where {T} = symdiff!!(unique!!(T(x)), ys...)
+_symdiff(e::Empty, ::Empty...) = e
 
 _setindex(::Empty{T}, v, k) where {T <: AbstractDict} = T(SingletonDict(k, v))
 Base.get(::Empty, _, default) = default
