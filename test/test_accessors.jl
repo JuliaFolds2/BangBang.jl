@@ -1,14 +1,14 @@
-module TestSetfield
+module TestAccessors
 
 include("preamble.jl")
-using Setfield: @lens, Lens, Setfield, set
+using Accessors: @optic, Accessors, set
 
-struct LensWrapper <: Lens
-    lens::Lens
+struct LensWrapper
+    lens::Any
 end
 
-Setfield.get(obj, lens::LensWrapper) = get(obj, lens.lens)
-Setfield.set(obj, lens::LensWrapper, value) = set(obj, lens.lens, value)
+Accessors.get(obj, lens::LensWrapper) = get(obj, lens.lens)
+Accessors.set(obj, lens::LensWrapper, value) = set(obj, lens.lens, value)
 
 mutable struct Mutable
     a
@@ -30,7 +30,7 @@ end
 end
 
 @testset "index lenses" begin
-    @static if isdefined(Setfield, :ConstIndexLens)
+    @static if isdefined(Accessors, :ConstIndexLens)
         @testset "ConstIndexLens" begin
             v = [1, 2, 3]
             i = j = 1
@@ -47,7 +47,7 @@ end
 
 @testset "default to immutable" begin
     x = Mutable((x=Mutable(1, 2), y=3), 4);
-    l = prefermutation(LensWrapper(@lens _.a.x.a))
+    l = prefermutation(LensWrapper(@optic _.a.x.a))
     y = set(x, l, 10)
     @test y !== x
     @test y.a.x.a == 10

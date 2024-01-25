@@ -84,3 +84,15 @@ InitialValues.hasinitialvalue(::Type{typeof(union!!)}) = true
 
 copyunionable(src::AbstractVector) = Base.copymutable(src)
 copyunionable(src) = Set(src)
+
+const InitIntersect!! = InitialValues.GenericInitialValue{typeof(intersect!!)}
+intersect!!(dest::InitIntersect!!, src) = copyunionable(src)
+intersect!!(dest, ::InitIntersect!!) = dest
+intersect!!(dest::InitIntersect!!, src::InitIntersect!!) = dest
+InitialValues.hasinitialvalue(::Type{typeof(intersect!!)}) = true
+
+const InitSymdiff!! = InitialValues.GenericInitialValue{typeof(symdiff!!)}
+symdiff!!(dest::InitSymdiff!!, src) = copyunionable(src)
+symdiff!!(dest, ::InitSymdiff!!) = dest
+symdiff!!(dest::InitSymdiff!!, src::InitSymdiff!!) = dest
+InitialValues.hasinitialvalue(::Type{typeof(symdiff!!)}) = true

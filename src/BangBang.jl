@@ -14,6 +14,7 @@ export @!,
        deleteat!!,
        empty!!,
        finish!,
+       intersect!!,
        lmul!!,
        materialize!!,
        merge!!,
@@ -31,6 +32,7 @@ export @!,
        setproperty!!,
        singletonof,
        splice!!,
+       symdiff!!,
        union!!,
        unique!!
 
@@ -58,6 +60,8 @@ include("utils.jl")
 function implements end
 function push!! end
 function unique!! end
+function union!! end
+function symdiff!! end
 
 include("NoBang/NoBang.jl")
 using .NoBang: Empty, SingletonVector, singletonof
@@ -70,9 +74,9 @@ include("broadcast.jl")
 include("collectors.jl")
 include("initials.jl")
 include("macro.jl")
-include("setfield.jl")
+include("accessors.jl")
 
-using .SetfieldImpl: @set!!, prefermutation
+using .AccessorsImpl: @set!!, prefermutation
 
 function __init__()
     @static if !isdefined(Base, :get_extension)
