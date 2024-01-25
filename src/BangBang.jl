@@ -62,7 +62,6 @@ function unique!! end
 include("NoBang/NoBang.jl")
 using .NoBang: Empty, SingletonVector, singletonof
 
-
 include("core.jl")
 include("base.jl")
 include("linearalgebra.jl")
