@@ -514,7 +514,7 @@ function possible(
     ::C,
     ::T,
     indices::Vararg
-    ) where {M, C <: AbstractArray{<:Real}, T <: AbstractArray{<:Real,M}}
+    ) where {M, C <: AbstractArray{<:Any}, T <: AbstractArray{<:Any,M}}
     return implements(setindex!, C) &&
         promote_type(eltype(C), eltype(T)) <: eltype(C) &&
         # This will still return `false` for scenarios such as
