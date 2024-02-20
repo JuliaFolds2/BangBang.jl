@@ -4,7 +4,7 @@
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliafolds2.github.io/BangBang.jl/dev)
 [![Codecov](https://codecov.io/gh/JuliaFolds2/BangBang.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaFolds2/BangBang.jl)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
-[![GitHub commits since tagged version](https://img.shields.io/github/commits-since/JuliaFolds2/BangBang.jl/v0.3.38.svg?style=social&logo=github)](https://github.com/JuliaFolds2/BangBang.jl)
+![GitHub commits since latest release (branch)](https://img.shields.io/github/commits-since/JuliaFolds2/BangBang.jl/latest/master?style=social&logo=github)
 
 BangBang.jl implements functions whose name ends with `!!`.  Those
 functions provide a uniform interface for mutable and immutable data
