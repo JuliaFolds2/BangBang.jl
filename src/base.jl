@@ -514,7 +514,10 @@ function possible(
     ::C,
     ::T,
     indices::Vararg
-    ) where {M, C <: AbstractArray{<:Any}, T <: AbstractArray{<:Any,M}}
+) where {T<:AbstractArray,C<:AbstractArray}
+    # Extract the dimensionality of `T` here instead of in the signature
+    # to make it easier to perform further specializations on `T`.
+    M = ndims(T)
     return implements(setindex!, C) &&
         promote_type(eltype(C), eltype(T)) <: eltype(C) &&
         # This will still return `false` for scenarios such as
@@ -523,6 +526,25 @@ function possible(
         #
         # which are in fact valid. However, this cases are rare.
         (_index_dimension(indices) == M || _index_dimension(indices) == 1)
+end
+
+# Specialization: `setindex!(::C,::T)` where `C<:AbstractArray{T}`
+function possible(
+    ::typeof(_setindex!),
+    ::C,
+    ::T,
+    indices::Vararg
+) where {T,C<:AbstractArray{T}}
+    return implements(setindex!, C) && _index_dimension(indices) == 0
+end
+# Specialization: `setindex!(::C,::C)` where `C<:AbstractArray`.
+function possible(
+    ::typeof(_setindex!),
+    ::C,
+    ::T,
+    indices::Vararg
+) where {T<:AbstractArray,C<:AbstractArray{T}}
+    return implements(setindex!, C) && _index_dimension(indices) == 0
 end
 
 """
