@@ -53,6 +53,10 @@ end
         xs = Vector{Vector{Float64}}(undef, 2)
         setindex!!(xs, [1.0], 1)
         @test xs[1] == [1.0]
+
+        xs = Vector(undef, 2)
+        setindex!!(xs, 1.0, 1)
+        @test xs[1] == 1.0
     end
 end
 
