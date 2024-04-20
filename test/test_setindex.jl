@@ -47,6 +47,13 @@ end
         @test setindex!!([1, 2, 3], [4, 5], 1) == [[4, 5], 2, 3]
         @test setindex!!([1, 2, 3], [4, 5, 6], :, 1) == [4, 5, 6]
     end
+
+    @testset "should mutate" begin
+        # Ref: https://github.com/JuliaFolds2/BangBang.jl/issues/21
+        xs = Vector{Vector{Float64}}(undef, 2)
+        setindex!!(xs, [1.0], 1)
+        @test xs[1] == [1.0]
+    end
 end
 
 @testset "slices" begin
