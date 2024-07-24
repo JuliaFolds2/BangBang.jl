@@ -4,7 +4,6 @@ export Empty, singletonof
 
 using Base.Iterators: Pairs
 using Base: ImmutableDict
-using Requires
 using ConstructionBase: constructorof, setproperties
 
 using ..BangBang: push!!, unique!!, union!!, symdiff!!, implements

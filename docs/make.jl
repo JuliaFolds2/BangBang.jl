@@ -12,7 +12,7 @@ makedocs(
     sitename = "BangBang.jl",
     authors = "Takafumi Arakaki <aka.tkf@gmail.com>",
     doctest = false,  # run via tests
-    strict = [
+    warnonly = Documenter.except(
         :autodocs_block,
         :cross_references,
         :docs_block,
@@ -27,7 +27,7 @@ makedocs(
         # :missing_docs,
         :parse_error,
         :setup_block,
-    ],
+    ),
     # Ref:
     # https://juliadocs.github.io/Documenter.jl/stable/lib/public/#Documenter.makedocs
 )

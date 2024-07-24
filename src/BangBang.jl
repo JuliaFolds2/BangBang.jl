@@ -45,7 +45,6 @@ using Base.Broadcast:
     materialize!,
     preprocess
 using Base: HasEltype, IteratorEltype, promote_typejoin
-using Compat: hasproperty
 using ConstructionBase: constructorof
 using InitialValues
 using LinearAlgebra
