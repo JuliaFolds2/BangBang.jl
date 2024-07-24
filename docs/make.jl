@@ -12,7 +12,7 @@ makedocs(
     sitename = "BangBang.jl",
     authors = "Takafumi Arakaki <aka.tkf@gmail.com>",
     doctest = false,  # run via tests
-    warnonly = Except(
+    warnonly = Documenter.except(
         :autodocs_block,
         :cross_references,
         :docs_block,
