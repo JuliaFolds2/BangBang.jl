@@ -27,6 +27,11 @@ end
     end
 
     let x = [1, 2]
+        y = [0, 0]
+        @test (@! y .= x)::Vector{Int} == [1, 2]
+    end
+
+    let x = [1, 2]
         y = SVector(0, 0)
         @test (@! y .= x .* 2)::Vector{Int} == [2, 4]
     end
@@ -49,6 +54,11 @@ end
     let x = [1, 2]
         y = [0, 0]
         @test (@! @. y = x * 2)::Vector{Int} == [2, 4]
+    end
+
+    let x = [1, 2]
+        y = [0, 0]
+        @test (@! @. y = x)::Vector{Int} == [1, 2]
     end
 
     let x = [1, 2]

@@ -670,6 +670,8 @@ false
 @inline _materialize!!(dest, bc::Broadcasted{Style}) where {Style} =
     _copyto!!(dest, instantiate(Broadcasted{Style}(bc.f, bc.args, axes(dest))))
 
+@inline _materialize!!(dest, x) = _materialize!!(dest, instantiate(broadcasted(identity, x)))
+
 pure(::typeof(_materialize!!)) = NoBang.materialize
 possible(::typeof(_materialize!!), ::Any, ::Any) = false
 possible(::typeof(_materialize!!), x::AbstractArray, ::Any) = implements(push!, x)
