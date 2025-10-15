@@ -85,6 +85,7 @@ implements(::typeof(setproperty!), ::Type{<:NamedTuple}) = false
 
 struct Undefined end
 implements(::Mutator, ::Undefined) = false
+Base.broadcastable(x::Undefined) = Ref(x)
 
 """
     possible(f!, args...) :: Bool
