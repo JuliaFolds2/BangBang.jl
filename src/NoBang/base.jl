@@ -149,7 +149,8 @@ resize(xs::AbstractVector, n::Integer) = similar(xs, (n,))
 
 setproperty(value, name, x) = setproperties(value, NamedTuple{(name,)}((x,)))
 
-materialize(::Any, x) = Broadcast.materialize(x)
+materialize(dest, x) =
+    Broadcast.materialize(Broadcast.instantiate(Broadcast.broadcasted(first ∘ tuple, x, dest)))
 
 @inline _union(args...) = union(args...)
 

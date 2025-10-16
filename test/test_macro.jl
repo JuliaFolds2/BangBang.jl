@@ -33,7 +33,15 @@ end
 
     let x = [1, 2]
         y = SVector(0, 0)
-        @test (@! y .= x .* 2)::Vector{Int} == [2, 4]
+        @test (@! y .= x .* 2)::SizedVector{2, Int} == [2, 4]
+    end
+
+    let y = [0, 0]
+        @test (@! y .= 1)::Vector{Int} == [1, 1]
+    end
+
+    let y = SVector(0, 0)
+        @test (@! y .= 1) === SVector(1, 1)
     end
 end
 
@@ -63,7 +71,15 @@ end
 
     let x = [1, 2]
         y = SVector(0, 0)
-        @test (@! @. y = x * 2)::Vector{Int} == [2, 4]
+        @test (@! @. y = x * 2)::SizedVector{2, Int} == [2, 4]
+    end
+
+    let y = [0, 0]
+        @test (@! @. y = 1)::Vector{Int} == [1, 1]
+    end
+
+    let y = SVector(0, 0)
+        @test (@! @. y = 1) === SVector(1, 1)
     end
 end
 

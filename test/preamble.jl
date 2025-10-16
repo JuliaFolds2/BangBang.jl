@@ -3,7 +3,7 @@ using Test
 using Base: ImmutableDict
 using BangBang
 using BangBang: implements
-using StaticArrays: SVector
+using StaticArrays: SVector, SizedVector
 
 """
     ==ₜ(x, y)
