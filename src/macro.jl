@@ -30,13 +30,17 @@ macro !(expr)
         if Meta.isexpr(x, :call)
             isdotoperator(x.args[1]) && return x
             return Expr(:call, Expr(:call, _maybb, x.args[1]), x.args[2:end]...)
-        elseif Meta.isexpr(x, :.=) && x.args[1] isa Symbol
+        elseif isdotoperator(x.head) && isequalsoperator(x.head) && x.args[1] isa Symbol
             @assert length(x.args) == 2
             lhs, rhs = x.args
-            return :($lhs = $materialize!!(
-                $Base.@isdefined($lhs) ? $lhs : $(Undefined()),
-                $air.($rhs),
-            ))
+            op = unequalsoperator(undotoperator(x.head))
+            if isnothing(op)
+                return :($lhs = $materialize!!(
+                    $Base.@isdefined($lhs) ? $lhs : $(Undefined()),
+                    $rhs,
+                ))
+            end
+            return :($lhs = $(Extras.broadcast_inplace!!)($op, $lhs, $rhs))
         end
         return x
     end |> esc
@@ -47,6 +51,8 @@ foldexpr(f, ex::Expr) = f(Expr(ex.head, foldexpr.(f, ex.args)...))
 
 isdotoperator(x::Symbol) = undotoperator(x) !== nothing
 
+isequalsoperator(x::Symbol) = unequalsoperator(x) !== nothing
+
 function undotoperator(x::Symbol)
     startswith(string(x), ".") || return nothing
     op = Symbol(string(x)[2:end])
@@ -54,6 +60,14 @@ function undotoperator(x::Symbol)
     return op
 end
 
+function unequalsoperator(x::Symbol)
+    endswith(string(x), "=") || return nothing
+    op = Symbol(string(x)[1:end-1])
+    Base.isoperator(op) || return nothing
+    return op
+end
+
+# Should not be required anymore. Keep for backwards compatibility?
 function air end
 struct Aired{T}
     value::T
