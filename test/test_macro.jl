@@ -43,6 +43,15 @@ end
     let y = SVector(0, 0)
         @test (@! y .= 1) === SVector(1, 1)
     end
+
+    let x = [1, 2]
+        y = SVector(0, 0)
+        @test (@! y .+= x)::SizedVector{2, Int} == [1, 2]
+    end
+
+    let y = SVector(0, 0)
+        @test (@! y .+= 1) === SVector(1, 1)
+    end
 end
 
 @testset "@." begin
@@ -80,6 +89,15 @@ end
 
     let y = SVector(0, 0)
         @test (@! @. y = 1) === SVector(1, 1)
+    end
+
+    let x = [1, 2]
+        y = SVector(0, 0)
+        @test (@! @. y += x)::SizedVector{2, Int} == [1, 2]
+    end
+
+    let y = SVector(0, 0)
+        @test (@! @. y += 1) === SVector(1, 1)
     end
 end
 
