@@ -34,5 +34,6 @@ end
 
     BangBang.implements(::BangBang.Mutator, ::Type{<:StaticArrays.StaticArray}) = false
     BangBang.implements(::typeof(setindex!), ::Type{<:StaticArrays.MArray}) = true
+    BangBang.implements(::typeof(setindex!), ::Type{<:StaticArrays.SizedArray}) = true
     BangBang.copyappendable(src::StaticArrays.StaticVector) = src
 end
