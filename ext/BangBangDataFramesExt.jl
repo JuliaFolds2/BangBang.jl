@@ -14,6 +14,22 @@ end
     BangBang.append!!(df::DataFrames.DataFrame, source) = df_append!!(df, source)
     BangBang.copyappendable(df::DataFrames.AbstractDataFrame) = copy(df)
 
+    function BangBang.setindex!!(
+        df::DataFrames.DataFrame,
+        v,
+        row::Integer,
+        col::Union{Integer,Symbol,AbstractString},
+    )
+        col_idx = col isa Integer ? Int(col) : DataFrames.columnindex(df, col)
+        columns = getfield(df, :columns)
+        old_col = columns[col_idx]
+        new_col = BangBang.setindex!!(old_col, v, row)
+        if new_col !== old_col
+            columns[col_idx] = new_col
+        end
+        return df
+    end
+
     _getvalue(x, pos, name) = getproperty(x, name)
     _getvalue(x::AbstractVector, pos, name) = x[pos]
     _getvalue(x::Tuple, pos, name) = x[pos]

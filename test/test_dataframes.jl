@@ -1,6 +1,6 @@
 module TestDataFrames
 
-using BangBang: append!!, push!!
+using BangBang: append!!, push!!, setindex!!
 using CategoricalArrays: CategoricalArray
 using DataFrames: DataFrame
 using InitialValues: InitialValue
@@ -81,6 +81,34 @@ end
         @test src == dest
         src.a[1] = 123
         @test src != dest
+    end
+end
+
+@testset "setindex!!" begin
+    @testset "basic" begin
+        df = DataFrame("a" => [0.0])
+        @test setindex!!(df, 1.0, 1, "a") === df
+        @test df[1, "a"] === 1.0
+    end
+
+    @testset "Symbol column" begin
+        df = DataFrame(a = [0.0])
+        @test setindex!!(df, 2.0, 1, :a) === df
+        @test df[1, :a] === 2.0
+    end
+
+    @testset "Integer column" begin
+        df = DataFrame(a = [0.0])
+        @test setindex!!(df, 3.0, 1, 1) === df
+        @test df[1, 1] === 3.0
+    end
+
+    @testset "type widening" begin
+        df = DataFrame(a = [1, 2, 3])
+        result = setindex!!(df, 1.5, 2, :a)
+        @test result === df
+        @test df[2, :a] === 1.5
+        @test eltype(df.a) === Float64
     end
 end
 
