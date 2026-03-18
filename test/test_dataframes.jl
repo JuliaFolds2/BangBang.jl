@@ -85,30 +85,40 @@ end
 end
 
 @testset "setindex!!" begin
-    @testset "basic" begin
-        df = DataFrame("a" => [0.0])
-        @test setindex!!(df, 1.0, 1, "a") === df
-        @test df[1, "a"] === 1.0
+    @testset "in-place $row" for (row, new_val) in [
+        (1, 2.0),
+        (1:2, [2.0, 3.0]),
+        (Colon(), [2.0, 3.0]),
+        ([1], [2.0]),
+    ]
+        @testset "$col" for col in ["a", :a, 1]
+            df = DataFrame("a" => [0.0, 1.0])
+            @test setindex!!(df, new_val, row, col) === df
+            @test df[row, col] == new_val
+        end
     end
 
-    @testset "Symbol column" begin
-        df = DataFrame(a = [0.0])
-        @test setindex!!(df, 2.0, 1, :a) === df
-        @test df[1, :a] === 2.0
-    end
-
-    @testset "Integer column" begin
-        df = DataFrame(a = [0.0])
-        @test setindex!!(df, 3.0, 1, 1) === df
-        @test df[1, 1] === 3.0
-    end
-
-    @testset "type widening" begin
-        df = DataFrame(a = [1, 2, 3])
-        result = setindex!!(df, 1.5, 2, :a)
-        @test result === df
-        @test df[2, :a] === 1.5
-        @test eltype(df.a) === Float64
+    @testset "in-place $row" for (row, new_val) in [
+        (1, 2.0),
+        (1:2, [2.0, 3.0]),
+        (Colon(), [2.0, 3.0]),
+        ([1], [2.0]),
+    ]
+        @testset "$col" for col in ["a", :a, 1]
+            # Start with integers
+            df = DataFrame("a" => [0, 1])
+            # Even though setindex!! will create a new array, it should still modify `df`
+            # itself in-place.
+            @test setindex!!(df, new_val, row, col) === df
+            @test df[row, col] == new_val
+            if row isa Integer
+                @test eltype(df.a) === Float64
+            else
+                # This should in principle also be Float64 but isn't due to
+                # https://github.com/JuliaFolds2/BangBang.jl/issues/39
+                @test eltype(df.a) === Any
+            end
+        end
     end
 end
 

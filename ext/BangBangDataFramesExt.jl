@@ -17,7 +17,7 @@ end
     function BangBang.setindex!!(
         df::DataFrames.DataFrame,
         v,
-        row::Integer,
+        row::Union{Integer,Colon,AbstractVector{<:Integer}},
         col::Union{Integer,Symbol,AbstractString},
     )
         col_idx = col isa Integer ? Int(col) : DataFrames.columnindex(df, col)
